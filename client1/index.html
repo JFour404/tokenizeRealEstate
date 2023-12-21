@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Web3 dApp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/3bde169e95.js" crossorigin="anonymous"></script>
+  </head>
+  
+  <body>
+  <div class="wrapper">
+    <div class="sidebar">
+        <h2>dHouse</h2>
+        <ul>
+          <li><a href="#" onclick="switchPage('dashboard')"><i class="fa-solid fa-gears"></i>Dashboard</a></li>
+          <li><a href="#" onclick="switchPage('marketplace')"><i class="fa-solid fa-cart-shopping"></i>Marketplace</a></li>
+          <li><a href="#" onclick="switchPage('rent')"><i class="fa-solid fa-money-bill"></i>Rent</a></li>
+          <li><a href="#" onclick="switchPage('map')"><i class="fas fa-map-pin"></i>Map</a></li>
+        </ul> 
+        
+    </div>
+    
+    <div class="main_content">
+      <div id="account" class="d-flex"></div> 
+    
+      <div id="dashboard" style="display: none;">
+        
+        <h2 class="pageHeading"><i class="fa-solid fa-plus"></i>Add new property</h2>
+        <div class="inputForm">
+          <form id="propertyForm">
+            <label for="price">Price:</label><br>
+            <input type="number" id="price" name="price"><br>
+          
+            <label for="forSale">For Sale:</label>
+            <input type="checkbox" id="forSale" name="forSale"><br>
+          
+            <label for="rentPayment">Rent Payment:</label><br>
+            <input type="number" id="rentPayment" name="rentPayment"><br>
+          
+            <label for="forRent">For Rent:</label>
+            <input type="checkbox" id="forRent" name="forRent"><br>
+          
+            <label for="propertyAddress">Property Address:</label><br>
+            <input type="text" id="propertyAddress" name="propertyAddress"><br>
+          
+            <label for="propertyType">Property Type:</label><br>
+            <input type="text" id="propertyType" name="propertyType"><br>
+          
+            <label for="imageURL">Image URL:</label><br>
+            <input type="text" id="imageURL" name="imageURL"><br>
+          
+            <input type="submit" value="Submit">
+          </form>          
+        </div>
+      
+        <h2 class="pageHeading"><i class="fa-solid fa-house"></i>Assets</h2>
+        <div class="assets">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="ownershipList"></div>
+            </div>
+          </div>
+        </div>  
+      
+      </div>
+        
+    
+
+
+      
+      <div id="marketplace" style="display: none;">
+        <button id="refreshButton">Refresh Properties</button>
+        <div class="realEstate">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="propertyList"></div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    
+      <div id="rent" style="display: none;">
+        <!-- Rent content goes here -->
+      </div>
+    
+      <div id="map" style="display: none;">
+        <!-- Map content goes here -->
+      </div>
+    </div>
+
+  </div>
+    <script type="module" src="index.js"></script>
+    <script>
+      function switchPage(pageId) {
+        // Hide all pages
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('marketplace').style.display = 'none';
+        document.getElementById('rent').style.display = 'none';
+        document.getElementById('map').style.display = 'none';
+      
+        // Show the selected page
+        document.getElementById(pageId).style.display = 'block';
+      }
+    </script>
+  </body>
+</html>
