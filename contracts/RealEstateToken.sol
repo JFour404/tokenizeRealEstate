@@ -1,72 +1,68 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract RealEstateToken {
+import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+contract RealEstateToken is ERC721 {
+    uint256 private _tokenIdCounter;
+
     struct RealEstateAsset {
         string propertyAddress;
         string description;
-        uint256 currentValue;
-        // Add any other relevant details here
+        string imageURL;
+        uint256 price;
+        bool forSale;
     }
 
-    // Token count to generate unique token IDs
-    uint256 private tokenCount;
+    mapping (uint256 => RealEstateAsset) private _tokenAssets;
 
-    // Mapping to associate token IDs with real estate assets
-    mapping(uint256 => RealEstateAsset) public tokenToAsset;
+    constructor() ERC721("RealEstateToken", "RET") {}
 
-    // Mapping to track token ownership
-    mapping(address => uint256[]) public ownership;
-
-    // Event for token creation
-    event TokenCreated(
-        uint256 indexed tokenId,
-        address indexed owner,
-        string propertyAddress,
-        string description
-    );
-
-    // Event for token ownership transfer
-    event TokenOwnershipTransferred(uint256 indexed tokenId, address indexed owner);
-
-    // Token Creation Function
-    function createToken(
-        string memory _propertyAddress,
-        string memory _description,
-        uint256 _currentValue
+    // Function to mint a new real estate token
+    function mint(
+        address to,
+        string memory propertyAddress,
+        string memory description,
+        string memory imageURL,
+        uint256 price,
+        bool forSale
     ) public {
-        // Input validation
-        require(bytes(_propertyAddress).length > 0, "Property address must be provided");
-        require(bytes(_description).length > 0, "Description must be provided");
-        require(_currentValue > 0, "Current value must be greater than zero");
+        // Increment the token counter
+        _tokenIdCounter++;
 
-        // Increment token count
-        tokenCount++;
+        // Mint a new token and assign it to the specified address
+        _mint(to, _tokenIdCounter);
 
-        // Create a new RealEstateAsset
-        RealEstateAsset memory newAsset = RealEstateAsset(_propertyAddress, _description, _currentValue);
+        // Create a RealEstateAsset struct with the provided details
+        RealEstateAsset memory asset = RealEstateAsset({
+            propertyAddress: propertyAddress,
+            description: description,
+            imageURL: imageURL,
+            price: price,
+            forSale: forSale
+        });
 
-        // Link token to its associated real estate asset
-        linkTokenToAsset(tokenCount, newAsset);
-
-        // Mint the new token
-        ownership[msg.sender].push(tokenCount);
-
-        // Emit the token creation event
-        emit TokenCreated(tokenCount, msg.sender, _propertyAddress, _description);
-
-        // Emit the token ownership event
-        emit TokenOwnershipTransferred(tokenCount, msg.sender);
+        // Store the asset information for the newly minted token
+        _tokenAssets[_tokenIdCounter] = asset;
     }
 
-    // Private function to link token to its associated real estate asset
-    function linkTokenToAsset(uint256 _tokenId, RealEstateAsset memory _asset) private {
-        tokenToAsset[_tokenId] = _asset;
-    }
-
-    // Function to get all token IDs owned by a specific address
-    function getTokenIdsByOwner(address _owner) external view returns (uint256[] memory) {
-        return ownership[_owner];
+    // Function to get all information about a specific token
+    function getTokenInfo(uint256 _tokenId) external view returns (
+        string memory propertyAddress,
+        string memory description,
+        uint256 price,
+        string memory imageURL,
+        bool forSale
+    ) {
+        // Retrieve and return information about the specified token
+        RealEstateAsset storage asset = _tokenAssets[_tokenId];
+        propertyAddress = asset.propertyAddress;
+        description = asset.description;
+        price = asset.price;
+        imageURL = asset.imageURL;
+        forSale = asset.forSale;
     }
 }
+
+
 
